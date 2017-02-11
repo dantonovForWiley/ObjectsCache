@@ -83,5 +83,5 @@ public interface ConfigurationValue {
      *
      * @return
      */
-    boolean isResponding();
+    Boolean isResponding();
 }

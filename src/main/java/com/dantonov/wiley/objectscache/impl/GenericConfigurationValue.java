@@ -32,7 +32,7 @@ public class GenericConfigurationValue<T> implements ChangeableConfigurationValu
     }
 
     @Override
-    public boolean isResponding() {
+    public Boolean isResponding() {
         if (currentState.isPresent() && specialState.isPresent()) {
             return checker.isFine(currentState.get(), specialState.get());
         } else {

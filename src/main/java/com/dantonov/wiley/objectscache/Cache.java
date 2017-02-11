@@ -1,5 +1,6 @@
 package com.dantonov.wiley.objectscache;
 
+import com.dantonov.wiley.objectscache.exceptions.AllocationInCacheException;
 import com.dantonov.wiley.objectscache.exceptions.ObjectNotFoundInCache;
 import com.dantonov.wiley.objectscache.impl.ObjectInCache;
 
@@ -22,8 +23,9 @@ public interface Cache {
      * Method to allocate the object, referenced by {@link ObjectInCache}
      *
      * @param cachedObject
+     * @throws AllocationInCacheException if cache can not allocate the object
      */
-    void allocateObject(ObjectInCache cachedObject);
+    void allocateObject(ObjectInCache cachedObject) throws AllocationInCacheException;
 
     /**
      * Method to remove the object, referenced by {@link ObjectInCache}, from this {@link Cache}
