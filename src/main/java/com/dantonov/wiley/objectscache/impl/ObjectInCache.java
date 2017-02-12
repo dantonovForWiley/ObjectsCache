@@ -83,6 +83,14 @@ public class ObjectInCache implements CachedObject {
         return object;
     }
 
+    /**
+     * Remove reference to object to 'free' the object. Should be called after storing object in
+     * some {@link com.dantonov.wiley.objectscache.Cache}
+     */
+    public void clearObjectRef(){
+        object = null;
+    }
+
     @Override
     public UUID getUuid() {
         return uuid;
