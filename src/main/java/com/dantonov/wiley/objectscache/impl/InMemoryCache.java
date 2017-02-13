@@ -120,9 +120,7 @@ public class InMemoryCache implements Cache {
     public void allocateObject(ObjectInCache cachedObject) throws AllocationInCacheException {
         cacheStorage.put(cachedObject.getUuid(), cachedObject.objectRef());
         cachedObject.clearObjectRef();
-        int currentCacheSize = cacheStorage.size();
-        percentLoadConfigurationValue.setCurrentState(currentCacheSize);
-        objectsInCacheConfigurationValue.setCurrentState(currentCacheSize);
+        updateCacheSizeInConfigurationValues();
     }
 
     @Override
@@ -135,16 +133,23 @@ public class InMemoryCache implements Cache {
         return getObject(cachedObject, false);
     }
 
+    private void updateCacheSizeInConfigurationValues(){
+        int currentCacheSize = cacheStorage.size();
+        percentLoadConfigurationValue.setCurrentState(currentCacheSize);
+        objectsInCacheConfigurationValue.setCurrentState(currentCacheSize);
+    }
+
     private ObjectInCache getObject(ObjectInCache cachedObject, boolean remove) throws ObjectNotFoundInCache {
         UUID uuid = cachedObject.getUuid();
         if (!cacheStorage.containsKey(uuid)) {
             throw new ObjectNotFoundInCache(cachedObject);
         } else {
-            Object object = null;
+            Object object;
             if (remove) {
-                cacheStorage.get(cachedObject.getUuid());
+                object = cacheStorage.remove(cachedObject.getUuid());
+                updateCacheSizeInConfigurationValues();
             } else {
-                cacheStorage.remove(cachedObject.getUuid());
+                object = cacheStorage.get(cachedObject.getUuid());
             }
             return ObjectInCache.from(cachedObject, object);
         }
