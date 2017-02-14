@@ -18,9 +18,19 @@ public interface ObjectCacheStrategy {
     void allocateObject(ObjectInCache objectInCache, CacheHierarchy cacheHierarchy) throws AllocationException;
 
     /**
+     * Method to implement releasing of cached object
+     *
+     * @param objectInCache  {@link ObjectInCache} reference for cached object
+     * @param cacheHierarchy {@link CacheHierarchy} representing underlying caches
+     */
+    default void releaseObject(ObjectInCache objectInCache, CacheHierarchy cacheHierarchy) {
+        // do nothing. illustrate interface expansion without modifying extended instances
+    }
+
+    /**
      * Method to implement objects' migration between underlying caches from {@link CacheHierarchy}
      *
-     * @param cacheLevelModel
+     * @param cacheHierarchy {@link CacheHierarchy} representing underlying caches
      */
-    void reallocateObjects(CacheHierarchy cacheLevelModel);
+    void reallocateObjects(CacheHierarchy cacheHierarchy);
 }

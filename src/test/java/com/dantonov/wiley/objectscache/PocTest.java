@@ -1,6 +1,7 @@
 package com.dantonov.wiley.objectscache;
 
 import com.dantonov.wiley.objectscache.exceptions.AllocationException;
+import com.dantonov.wiley.objectscache.exceptions.AllocationInCacheException;
 import com.dantonov.wiley.objectscache.exceptions.ObjectNotFoundInCache;
 import com.dantonov.wiley.objectscache.impl.ObjectCacheImpl;
 import com.dantonov.wiley.objectscache.impl.SimpleChacheListHierarchy;
@@ -47,7 +48,7 @@ public class PocTest {
 
             try {
                 LOGGER.info(String.format("cached object: id = %s, str = %s",x.getUuid(),String.valueOf(x.getObject())));
-            } catch (ObjectNotFoundInCache objectNotFoundInCache) {
+            } catch (ObjectNotFoundInCache | AllocationInCacheException objectNotFoundInCache) {
                 objectNotFoundInCache.printStackTrace();
             }
 

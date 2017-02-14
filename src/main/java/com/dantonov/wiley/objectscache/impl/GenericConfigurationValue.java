@@ -42,12 +42,12 @@ public class GenericConfigurationValue<T> implements ChangeableConfigurationValu
 
     @Override
     public String presentCurrentState() {
-        return currentStatePresenter.present(specialState.get());
+        return currentStatePresenter.present(currentState.get());
     }
 
     @Override
     public String presentSpecialState() {
-        return specialStatePresenter.present(currentState.orElse(null));
+        return specialStatePresenter.present(specialState.orElse(null));
     }
 
     @Override

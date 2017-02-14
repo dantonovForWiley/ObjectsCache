@@ -6,6 +6,7 @@ import com.dantonov.wiley.objectscache.ConfigurationValue;
 import com.dantonov.wiley.objectscache.ObjectCacheStrategy;
 import com.dantonov.wiley.objectscache.exceptions.AllocationInCacheException;
 import com.dantonov.wiley.objectscache.exceptions.ObjectNotFoundInCache;
+import com.dantonov.wiley.objectscache.exceptions.UnacceptableCacheBuildParameter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,18 +34,18 @@ public class InMemoryCache implements Cache {
                     if (specialState == 0) {
                         return currentState == 0;
                     }
-                    return (((double)currentState * 100) / maxCacheSize) <= specialState;
+                    return (((double) currentState * 100) / maxCacheSize) <= specialState;
                 }),
                 ConfigurationValue.WARN_LEVEL.WARN, maxPercent -> String.format("Cache load " +
-                "should not exceed %s%", maxPercent), current -> {
+                "should not exceed %s percents", maxPercent), current -> {
 
             String currentLoad;
             if (dangerLoad == 0) {
                 currentLoad = "Since danger load is set to 0, it is not possible to calculate " +
                         "current load in percents.";
             } else {
-                Double currentLoadValue = ((double) current / dangerLoad) * 100;
-                currentLoad = String.format("Current load is %d%s", currentLoadValue);
+                Double currentLoadValue = ((double) current / maxCacheSize) * 100;
+                currentLoad = String.format("Current load is %s percents", currentLoadValue);
             }
             return currentLoad;
         });
@@ -133,7 +134,7 @@ public class InMemoryCache implements Cache {
         return getObject(cachedObject, false);
     }
 
-    private void updateCacheSizeInConfigurationValues(){
+    private void updateCacheSizeInConfigurationValues() {
         int currentCacheSize = cacheStorage.size();
         percentLoadConfigurationValue.setCurrentState(currentCacheSize);
         objectsInCacheConfigurationValue.setCurrentState(currentCacheSize);

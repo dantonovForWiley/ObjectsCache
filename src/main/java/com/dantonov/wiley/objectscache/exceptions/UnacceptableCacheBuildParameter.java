@@ -1,4 +1,4 @@
-package com.dantonov.wiley.objectscache.impl;
+package com.dantonov.wiley.objectscache.exceptions;
 
 /**
  * Exception for case when cache builder can not process unacceptable parameter

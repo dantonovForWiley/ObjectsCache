@@ -1,5 +1,6 @@
 package com.dantonov.wiley.objectscache.impl;
 
+import com.dantonov.wiley.objectscache.exceptions.UnacceptableCacheBuildParameter;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 

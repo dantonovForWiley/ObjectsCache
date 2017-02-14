@@ -4,11 +4,11 @@ import com.dantonov.wiley.objectscache.Cache;
 import com.dantonov.wiley.objectscache.ConfigurationValue;
 import com.dantonov.wiley.objectscache.exceptions.AllocationInCacheException;
 import com.dantonov.wiley.objectscache.exceptions.ObjectNotFoundInCache;
+import com.dantonov.wiley.objectscache.exceptions.UnacceptableCacheBuildParameter;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static org.testng.Assert.*;
@@ -81,7 +81,7 @@ public class InMemoryCacheTest {
                 assertEquals(originalObject, newObjectInCacheRef.objectRef(), "ObjectInCache, " +
                         "referencing to object got from cache must contains the same object that " +
                         "had been cached");
-            } catch (ObjectNotFoundInCache objectNotFoundInCache) {
+            } catch (ObjectNotFoundInCache | AllocationInCacheException objectNotFoundInCache) {
                 assertNull(objectNotFoundInCache, "ObjectNotFoundInCache exception on " +
                         "getting cached object from cache is not expected");
             }
@@ -112,7 +112,7 @@ public class InMemoryCacheTest {
                 assertEquals(originalObject, newObjectInCacheRef.objectRef(), "ObjectInCache, " +
                         "referencing to object released by cache must contains the same object that had been " +
                         "cached");
-            } catch (ObjectNotFoundInCache objectNotFoundInCache) {
+            } catch (ObjectNotFoundInCache | AllocationInCacheException objectNotFoundInCache) {
                 assertNull(objectNotFoundInCache, "ObjectNotFoundInCache exception on " +
                         "removing cached object from cache is not expected");
             }

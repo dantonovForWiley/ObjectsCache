@@ -5,6 +5,7 @@ import com.dantonov.wiley.objectscache.CachedObject;
 import com.dantonov.wiley.objectscache.ObjectCacheStrategy;
 import com.dantonov.wiley.objectscache.ObjectsCache;
 import com.dantonov.wiley.objectscache.exceptions.AllocationException;
+import com.dantonov.wiley.objectscache.exceptions.AllocationInCacheException;
 import com.dantonov.wiley.objectscache.exceptions.ObjectNotFoundInCache;
 
 /**
@@ -61,7 +62,14 @@ public class ObjectCacheImpl implements ObjectsCache {
     public CachedObject cacheObject(Object object) throws AllocationException {
         ObjectInCache objectInCache = new ObjectInCache.Builder().setObject(object).setObjectsCache(this).build();
         cacheMovingStrategy.allocateObject(objectInCache, cacheLevelModel);
+        cacheMovingStrategy.reallocateObjects(cacheLevelModel);
         return objectInCache;
+    }
+
+    @Override
+    public void releaseCachedObject(CachedObject cachedObject) {
+        cacheMovingStrategy.releaseObject(ObjectInCache.from(cachedObject, this), cacheLevelModel);
+        cacheMovingStrategy.reallocateObjects(cacheLevelModel);
     }
 
     /**
@@ -69,9 +77,12 @@ public class ObjectCacheImpl implements ObjectsCache {
      *
      * @param objectInCache {@link ObjectInCache} reference to wanted object
      * @return {@link Object}
-     * @throws ObjectNotFoundInCache in case when object can has not been found
+     * @throws ObjectNotFoundInCache      in case when object can has not been found
+     * @throws AllocationInCacheException in case when object has not been retrieved due to cache
+     *                                    internal exception
      */
-    public Object findObject(ObjectInCache objectInCache) throws ObjectNotFoundInCache {
+    public Object findObject(ObjectInCache objectInCache) throws ObjectNotFoundInCache, AllocationInCacheException {
+        cacheMovingStrategy.reallocateObjects(cacheLevelModel);
         return cacheLevelModel.getCacheList().parallelStream().filter((cache -> cache.contains(objectInCache))).findFirst().orElseThrow(() -> new ObjectNotFoundInCache(objectInCache)).returnObject(objectInCache).objectRef();
     }
 

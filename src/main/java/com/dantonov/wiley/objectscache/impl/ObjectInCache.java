@@ -1,6 +1,8 @@
 package com.dantonov.wiley.objectscache.impl;
 
 import com.dantonov.wiley.objectscache.CachedObject;
+import com.dantonov.wiley.objectscache.ObjectsCache;
+import com.dantonov.wiley.objectscache.exceptions.AllocationInCacheException;
 import com.dantonov.wiley.objectscache.exceptions.ObjectNotFoundInCache;
 
 import java.util.UUID;
@@ -70,13 +72,35 @@ public class ObjectInCache implements CachedObject {
         return new ObjectInCache(actualObject, objectInCache.objectsCache, objectInCache.uuid);
     }
 
+    /**
+     * Support construct from {@link CachedObject}
+     *
+     * @param cachedObject source {@link CachedObject}
+     * @param objectsCache associated {@link ObjectCacheImpl}
+     * @return new {@link ObjectInCache} instances
+     */
+    public static ObjectInCache from(CachedObject cachedObject, ObjectCacheImpl objectsCache) {
+        return new ObjectInCache(null, objectsCache, cachedObject.getUuid());
+    }
+
+    /**
+     * Support construct from {@link UUID}
+     *
+     * @param uuid
+     * @return
+     */
+    public static ObjectInCache from(UUID uuid) {
+        return new ObjectInCache(null, null, uuid);
+    }
+
     @Override
-    public Object getObject() throws ObjectNotFoundInCache {
+    public Object getObject() throws ObjectNotFoundInCache, AllocationInCacheException {
         return objectsCache.findObject(this);
     }
 
     /**
      * Method to retrieve {@link Object} directly from {@link ObjectInCache} instances
+     *
      * @return
      */
     public Object objectRef() {
@@ -87,7 +111,7 @@ public class ObjectInCache implements CachedObject {
      * Remove reference to object to 'free' the object. Should be called after storing object in
      * some {@link com.dantonov.wiley.objectscache.Cache}
      */
-    public void clearObjectRef(){
+    public void clearObjectRef() {
         object = null;
     }
 

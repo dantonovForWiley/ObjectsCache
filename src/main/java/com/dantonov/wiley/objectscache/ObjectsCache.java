@@ -15,4 +15,12 @@ public interface ObjectsCache {
      * @throws AllocationException in case when object has not been cached
      */
     CachedObject cacheObject(Object object) throws AllocationException;
+
+    /**
+     * Method to release {@link CachedObject} referenced to cached object<br>
+     * Calling means cached objects is not more needed to be stored
+     *
+     * @param cachedObject {@link CachedObject} reference to cached object
+     */
+    void releaseCachedObject(CachedObject cachedObject);
 }

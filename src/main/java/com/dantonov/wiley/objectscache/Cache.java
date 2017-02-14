@@ -32,18 +32,22 @@ public interface Cache {
      *
      * @param cachedObject {@link ObjectInCache} reference to the cached object to be removed from this cache
      * @return {@link ObjectInCache} reference to the cached object
-     * @throws ObjectNotFoundInCache in case then object has not been found
+     * @throws ObjectNotFoundInCache      in case then object has not been found
+     * @throws AllocationInCacheException in case when cache has failed to remove cached object
+     *                                    due to internal exceptions
      */
-    ObjectInCache freeObject(ObjectInCache cachedObject) throws ObjectNotFoundInCache;
+    ObjectInCache freeObject(ObjectInCache cachedObject) throws ObjectNotFoundInCache, AllocationInCacheException;
 
     /**
      * Method to return object from the {@link Cache}. Object is still stored in the cache.
      *
      * @param cachedObject {@link ObjectInCache} reference to the cached object to be retrieved from this cache
      * @return {@link ObjectInCache} reference to the cached object
-     * @throws ObjectNotFoundInCache in case then object has not been found
+     * @throws ObjectNotFoundInCache      in case then object has not been found
+     * @throws AllocationInCacheException in case when cache has failed to retrieve cached object
+     *                                    due to internal exceptions
      */
-    ObjectInCache returnObject(ObjectInCache cachedObject) throws ObjectNotFoundInCache;
+    ObjectInCache returnObject(ObjectInCache cachedObject) throws ObjectNotFoundInCache, AllocationInCacheException;
 
     /**
      * Method to verify if the object, referenced by {@link ObjectInCache}, is existing in this {@link Cache}
